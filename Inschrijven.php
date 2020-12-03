@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <?php
-    if(((isset($_POST["verstuur"])))&&(isset($_POST["voornaam"])))
+    if((isset($_POST["verstuur"]))&&(isset($_POST["voornaam"]))&&(@$_POST["voornaam"] !=""))
     {
         $mysqli= new MySQLi ("localhost", "root", "", "scobra");
         if(mysqli_connect_errno())
@@ -14,10 +14,9 @@
                 
                 if($stmt = $mysqli->prepare($sql))
                 {
-                    $stmt->bind_param("s",$voornaam);
-                    $voornaam = $mysqli->real_escape_string($_POST["voornaam"]);
-                    
-                    
+                    $stmt->bind_param("s",$Voornaam);
+                    $Voornaam = $mysqli->real_escape_string($_POST["voornaam"]);
+                                    
                     if(!$stmt->execute())
                     {
                         echo "Het uitvoeren van de query is mislukt:";
@@ -46,19 +45,35 @@
     <h1>Inschrijvingsformulier</h1>
     <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
         
-        <h4>Voornaam:<input type="text" name="voornaam" id="voornaam">Naam:<input type="text" name="naam" id="naam"></h4>
+        <h4>Voornaam:<input type="text" name="voornaam" id="voornaam" value="<?php if(isset($_POST["voornaam"]))                                                                                     {echo $Voornaam;} ?>"/>
+            Naam:<input type="text" name="naam" id="naam"></h4>
+        
         <h4>Geboortedatum:<input type="date" name="gemeente" id="geboortedatum"></h4>
-        <h4>Geslacht:</h4><p>Man:<input type="radio" name="geslacht" id="geslacht"><p>Vrouw:<input type="radio" name="geslacht" id="geslacht"></p>
+        
+        <h4>Geslacht:</h4>
+        <p>Man:<input type="radio" name="geslacht" id="geslacht"><p>Vrouw:<input type="radio" name="geslacht" id="geslacht"></p>
+        
         <h4>Email:<input type="email" name="mail" id="mail">Telefoonnummer<input type="text" name="telnr" id="telnr"></h4>
+        
         <h4>Adresgegevens:</h4>
+        
         <p>Gemeente:<input type="text" name="gemeente" id="gemeente">Postcode:<input type="text" name="postcode" id="postcode"></p>
+        
         <p>Straat:<input type="text" name="straat" id="straat">Huisnummer:<input type="text" name="huisnr" id="huisnr"></p>
+        
         <h4>Voornaam ouder1:<input type="text" name="voornaamO1" id="voornaamO1">Naam ouder1:<input type="text" name="naamO1" id="naamO1"></h4>
+        
         <h4>Voornaam ouder2:<input type="text" name="voornaamO2" id="voornaamO2">Naam ouder2:<input type="text" name="naamO2" id="naamO2"></h4>
+        
         <h4>Email ouder:<input type="email" name="mailO" id="mailO">Telefoonnummer ouder:<input type="text" name="telnrO" id="telnrO"></h4>
+        
         <h4>Rekeningnummer:<input type="text" id="reknr" name="reknr"></h4>
+        
         <h4>Wenst u financiële ondersteuning(Scouting Op Maat?)</h4>
+        
         <h4>Ja:<input type="radio" name="SoM" id="SoM">Nee:<input type="radio" name="SoM" id="SoM"></h4>
+        
+        
         <input type="submit" value="verstuur" name="verstuur">
     </form>
         
